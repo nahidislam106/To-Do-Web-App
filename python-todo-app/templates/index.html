@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="todo-container">
+        <h1>To-Do App</h1>
+        
+        <form action="/" method="POST" class="todo-form">
+            <input type="text" name="content" id="content" placeholder="Add new task" required>
+            <button type="submit" class="btn btn-primary">Add Task</button>
+        </form>
+
+        {% if tasks %}
+            <table class="todo-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Added</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                        <tr class="{% if task.completed %}completed{% endif %}">
+                            <td>
+                                <a href="{{ url_for('toggle_complete', id=task.id) }}" class="task-link">
+                                    {{ task.content }}
+                                </a>
+                            </td>
+                            <td>{{ task.date_created.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td class="actions">
+                                <a href="{{ url_for('update', id=task.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a href="{{ url_for('delete', id=task.id) }}" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-tasks">No tasks yet. Add one above!</p>
+        {% endif %}
+    </div>
+{% endblock %}
